@@ -7,6 +7,7 @@ import org.example.expert.domain.common.exception.NotFoundException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -64,6 +65,19 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         ));
+    }
+
+    public Page<TodoSearchResponse> searchTodos(
+            int page,
+            int size,
+            String keyword,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            String managerNickname
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        return todoRepository.searchTodos(keyword, startDate, endDate, managerNickname, pageable);
     }
 
     public TodoResponse getTodo(long todoId) {
